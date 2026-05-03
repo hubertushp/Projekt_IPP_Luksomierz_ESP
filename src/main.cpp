@@ -65,11 +65,15 @@ void loop() {
         
         float pitch = accelGyro[3] / 131.0;
         float roll  = accelGyro[4] / 131.0;
+        //float tempC = 25.0;
         float tempC = (analogRead(TEMP_PIN) * 3.3 / 4095.0) * 100.0;
 
         // Twozymy JSON z danymi
         JsonDocument doc; 
         doc["lux_1"] = lux1.readLightLevel();
+        //doc["lux_2"] = 0.0;
+        //doc["lux_3"] = 0.0;
+        //doc["lux_4"] = 0.0;
         doc["lux_2"] = lux2.readLightLevel();
         doc["lux_3"] = lux3.readLightLevel();
         doc["lux_4"] = lux4.readLightLevel();
@@ -85,6 +89,10 @@ void loop() {
         
         http.begin(url);
         http.addHeader("Content-Type", "application/json");
+
+        Serial.println("--- WYSYŁANA RAMKA JSON ---");
+        Serial.println(jsonPayload); 
+        Serial.println("---------------------------");
         
         int httpCode = http.POST(jsonPayload);
         if (httpCode > 0) Serial.printf("Sukces: %d\n", httpCode);
