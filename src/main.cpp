@@ -10,8 +10,8 @@
 // --- KONFIGURACJA PINÓW ---
 #define I2C_SDA_1 21
 #define I2C_SCL_1 22
-#define I2C_SDA_2 17
-#define I2C_SCL_2 16
+#define I2C_SDA_2 18
+#define I2C_SCL_2 19
 #define TEMP_PIN  34
 
 // --- KONFIGURACJA HOTSPOTU ---
@@ -21,6 +21,7 @@ const char* ap_pass = "politechnika";
 // --- OBIEKTY CZUJNIKÓW ---
 BH1750 lux1, lux2, lux3, lux4;
 DFRobot_BMI160 bmi160;
+const int BMI160_ADDR = 0x69; // Adres I2C dla BMI160
 
 // --- FUNKCJA POMOCNICZA DO POBIERANIA IP KLIENTA ---
 String getTargetIP() {
@@ -46,7 +47,7 @@ void setup() {
     Wire1.begin(I2C_SDA_2, I2C_SCL_2); 
 
     if (bmi160.softReset() != BMI160_OK) Serial.println("BMI160 reset fail");
-    if (bmi160.I2cInit(BMI160_I2C_ADDR) != BMI160_OK) Serial.println("BMI160 init fail");
+    if (bmi160.I2cInit(BMI160_ADDR) != BMI160_OK) Serial.println("BMI160 init fail");
 
     lux1.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire);
     lux2.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x5C, &Wire);
@@ -103,5 +104,5 @@ void loop() {
         Serial.println("Czekam na klienta...");
     }
 
-    delay(1000);
+    delay(500);
 }
